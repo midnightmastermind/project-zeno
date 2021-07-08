@@ -1,0 +1,27 @@
+/* Calendar */
+
+.topHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: white;
+    padding: 5px 10px;
+    justify-content: space-between;
+    border-bottom: 1px solid #787a80;
+}
+
+.icon {
+  cursor: pointer;
+  transition: .15s ease-out;
+}
+
+.header {
+  height: 23px;
+  .icon:first-of-type {
+    margin-left: 1em;
+  }
+  .icon:last-of-type {
+    margin-right: 1em;
+  }
+
+}

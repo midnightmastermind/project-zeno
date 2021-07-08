@@ -1,0 +1,11 @@
+export const GET_ERRORS = "GET_ERRORS";
+export const USER_LOADING = "USER_LOADING";
+export const SET_CURRENT_USER = "SET_CURRENT_USER";
+export const RECEIVE_BLOCKS = "RECEIVE_BLOCKS";
+export const REQUEST_BLOCKS = "REQUEST_BLOCKS";
+export const RECEIVE_EVENTS = "RECEIVE_EVENTS";
+export const REQUEST_EVENTS = "REQUEST_EVENTS";
+export const REGISTER = 'REGISTER';
+export const AUTHENTICATE = 'AUTHENTICATE';
+export const DEAUTHENTICATE = 'DEAUTHENTICATE';
+export const USER = 'USER';

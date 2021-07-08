@@ -1,0 +1,32 @@
+.toolBar {
+  height: 100%;
+  width: 3.5rem;
+  overflow-x: hidden;
+  background: #000;
+  border: 1px solid #787a80;
+  box-shadow: 0 20px 30px rgba(0,0,0,0.5);
+  transition: filter 2s;
+  opacity: .6;
+  position: relative;
+  margin: 10px 0px 0px 10px;
+  border-radius: 5px;
+  transition: 0.5s;
+}
+
+.opened {
+  width: 250px;
+}
+
+.button {
+  position: absolute;
+  margin-top: 10px;
+  right: 15px;
+}
+
+.navigation {
+  margin-top: 50px;
+  display: none;
+}
+.opened > .navigation {
+  display: block;
+}

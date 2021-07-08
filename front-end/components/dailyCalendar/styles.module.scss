@@ -1,0 +1,75 @@
+
+.today {
+    width: 40%;
+    height: 500px;
+    border-left: 1px solid #787a80;
+    border-right: 1px solid #787a80;
+    padding-bottom: 50px;
+}
+
+.dayTitle {
+    align-self: center;
+    padding: 5px;
+    display: flex;
+}
+
+.sortableElement {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.viewChange {
+    display: flex;
+    max-width: 50px;
+    align-items: center;
+}
+.dayHeader {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.outerDays {
+    width: 30%;
+    height: 500px;
+    padding-bottom: 50px;
+}
+.dayBody {
+  display: flex;
+}
+.general {
+    height: 25%;
+    width: 100%;
+    border-bottom: 1px solid #787a80;
+}
+
+.header .icon:first-of-type {
+  margin-left: 1em;
+}
+
+.header .icon:last-of-type {
+  margin-right: 1em;
+}
+
+.header {
+    height: 23px;
+}
+
+.hour {
+    opacity: .6;
+    border-top: 1px solid #787a80;
+}
+/* .dailyCalendar .day .hour:nth-child(odd) .hour-number {
+    border-right: 1px solid #282c34;
+} */
+.hourNumber {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0px 5px 0px 5px;
+    border-right: 1px solid #787a80;
+    min-width: 70px;
+    font-size: 12px;
+}

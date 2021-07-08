@@ -1,0 +1,58 @@
+@import "../../styles/variables.scss";
+
+.menuWrapper {
+  position: absolute;
+  bottom: 3rem;
+  right: 0;
+  width: auto;
+  height: auto;
+  min-width: 6rem;
+  z-index: 12;
+  display: flex;
+  flex-direction: column;
+  z-index:100;
+}
+
+.menu {
+  background: #000;
+  box-shadow: $box-shadow;
+  border-radius: 0.5rem;
+  border: 1px solid #787a80;
+  z-index: 12;
+}
+
+.item {
+  font-family: $accent;
+  font-size: 0.875rem;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid $secondary;
+  z-index: 100;
+}
+
+.item:last-of-type {
+  border-bottom: none;
+}
+
+.item:hover,
+.item:focus {
+  background: #000;
+  cursor: pointer;
+}
+
+.item:first-of-type:hover,
+.item:first-of-type:focus {
+  border-top-right-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
+}
+
+.item:last-of-type:hover,
+.item:last-of-type:focus {
+  border-bottom-right-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+}
+
+.selectedTag {
+  background: $tertiary;
+  border-radius: 0.5rem;
+}
