@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 // we load the page from the database.
 
 module.exports = (req, res, next) => {
+  console.log(req);
   const { token } = req.cookies;
   if (token) {
     const { userId } = jwt.verify(token, process.env.JWT_KEY);

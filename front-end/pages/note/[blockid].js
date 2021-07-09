@@ -32,7 +32,6 @@ export const getServerSideProps = async (context) => {
       }
     );
     const data = await response.json();
-    console.log(data);
     return {
       props: { blocks: data.block.blocks, blockid: blockId, err: false },
     };

@@ -15,7 +15,6 @@ class CalendarContainer extends Component {
 		static getInitialProps({store}) {}
     constructor(props) {
         super(props);
-				console.log(props);
         this.toggleView = this.toggleView.bind(this);
         this.state = {
             view: 'daily'

@@ -56,7 +56,7 @@ const fileFilter = (req, file, cb) => {
 };
 
 const app = express();
-
+app.use(cookieParser());
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Credentials", true);
   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
@@ -72,7 +72,6 @@ if (req.method == "OPTIONS") {
 next();
 });
 app.use(bodyParser.json());
-app.use(cookieParser());
 
 app.use(
   multer({
@@ -85,13 +84,14 @@ const corsOptions = {
   //To allow requests from client
   origin: [
     "http://localhost:3000",
+    "http://localhost:8080"
   ],
   credentials: true,
   exposedHeaders: ["set-cookie"],
 };
 app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/blocks", cors(corsOptions), blocksRoutes);
-app.use("/users", usersRoutes);
+app.use("/users", cors(corsOptions), usersRoutes);
 
 // Error Handling
 app.use((err, req, res, next) => {

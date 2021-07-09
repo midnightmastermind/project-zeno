@@ -12,7 +12,6 @@ const signup = ({ name, email, password, confirm_password }, type) => {
     axios.post(`${process.env.NEXT_PUBLIC_API}/users/${type}`, {name, email, password, confirm_password })
       .then((response) => {
         Router.push('/login');
-        console.log(response.data.message);
       })
       .catch((err) => {
           alert(err);
@@ -56,7 +55,6 @@ const deauthenticate = () => {
 };
 
 const getUser = ({ token }, type) => {
-  console.log(token)
   return (dispatch) => {
     axios.get(`${process.env.NEXT_PUBLIC_API}/${type}`,{headers: {
       "Authorization" : "bearer " + token
@@ -87,8 +85,25 @@ const getUser = ({ token }, type) => {
   };
 };
 
+export const checkServerSideCookie = ctx => {
+    if (ctx.isServer) {
+        if (ctx.req.headers.cookie) {
+            const token = getCookie('token', ctx.req);
+            ctx.reduxStore.dispatch(reauthenticate(token, user));
+        }
+    } else {
+        const token = ctx.reduxStore.getState().auth.token;
+
+        if (token && (ctx.pathname === '/signin' || ctx.pathname === '/signup')) {
+            setTimeout(function() {
+                Router.push('/');
+            }, 0);
+        }
+    }
+};
 
 export default {
+  checkServerSideCookie,
   signup,
   authenticate,
   reauthenticate,

@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import actions from '../redux/actions/authActions';
-import initialize from '../utils/initialize';
 import Layout from '../components/Layout';
 
 class Login extends React.Component {
@@ -14,7 +13,6 @@ class Login extends React.Component {
   }
 
   static getInitialProps(ctx) {
-    initialize(ctx);
     return {props: {}}
   }
 
@@ -27,7 +25,6 @@ class Login extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <div className="boxContainer fullWidth">
         <h3 className="title is-3">Sign In</h3>

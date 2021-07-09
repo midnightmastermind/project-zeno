@@ -6,17 +6,17 @@ import ToolBar from '../toolBar'
 import styles from "./styles.module.scss";
 import { useContext, useState } from "react";
 import { useRouter } from "next/router";
-
+import authActions from '../../redux/actions/authActions'
 import { fetchBlocks, updateBlock } from "../../redux/actions/blockActions";
 import { fetchEvents, updateEvent } from "../../redux/actions/eventActions";
 import { connect } from 'react-redux';
 
 const Layout = (props) => {
-  const initialBlocks = props.blocks || [];
+  const blocks = props.blocks.blocks || [];
   const router = useRouter();
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
-  const [toolBlocks, setToolBlocks] = useState(initialBlocks);
+
 
   const isLoginPage = router.pathname === "/login";
 
@@ -44,9 +44,9 @@ const Layout = (props) => {
   }
 
   const toolProps = {
-    blocks: toolBlocks
+    blocks: blocks
   }
-  console.log(toolProps);
+  
   return (
     <div id="layoutRoot">
       <Head>
@@ -63,7 +63,6 @@ const Layout = (props) => {
     </div>
   );
 };
-
 
 export default connect(
   state => state

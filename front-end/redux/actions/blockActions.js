@@ -13,7 +13,6 @@ export const fetchBlocks = dispatch => {
     .get(`${process.env.NEXT_PUBLIC_API}/blocks`, {withCredentials: true})
     .then(res => {
       const blocks = res.data;
-      console.log(blocks);
       dispatch(receiveBlocks(blocks.blocks));
     })
     .catch(err =>

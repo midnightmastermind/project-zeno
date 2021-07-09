@@ -13,7 +13,7 @@ const Note = ({ blockId, blocks, err }) => {
 export const getServerSideProps = async (context) => {
   const res = context.res;
   const req = context.req;
-  console.log(context);
+
   const block = { _id: objectId(), tag: "p", html: "", imageUrl: "", blocks: [], pageBlock: true};
 
   try {

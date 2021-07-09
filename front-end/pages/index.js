@@ -3,7 +3,6 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import Button from "../components/button";
 import { connect } from 'react-redux';
-import initialize from '../utils/initialize';
 import Layout from '../components/Layout';
 import { useRouter } from 'next/router'
 
@@ -17,7 +16,6 @@ class Home extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <div className={`${styles.homepageContainer} boxContainer fullWidth`}>
         <h1>Welcome to project<span style={{ fontSize: "1.75rem" }}>.zeno</span></h1>

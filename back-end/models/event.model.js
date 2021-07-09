@@ -11,12 +11,6 @@ const EventSchema = new Schema({
     general: {type: Boolean, default: true}
 })
 
-// BlockSchema.post('findOneAndUpdate', function(doc, next) {
-//   recursive_reference(this._update, "children")
-//   console.log(this._update["children"]);
-//   next();
-// });
-//create model
 const Event = mongoose.model('Event', EventSchema);
 
 
