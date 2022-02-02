@@ -76,10 +76,19 @@ const ToolBar = (props) => {
 
   const [treeData, setTreeData] = useState([props.blocks.toolBar]);
   const [isOpen, setIsOpen] = useState(false);
+  const [fileTheme, setFileTheme] = useState(null);
 
   useEffect(() => {
       setTreeData([props.blocks.toolBar]);
   }, [props.blocks.toolBar])
+
+  useEffect(() => {
+    (function importSortableTree() {
+      import('react-sortable-tree-theme-file-explorer').then((obj) => {
+        setFileTheme(obj.default);
+      })
+    })();
+  }, [])
   const handleSetTreeData = (newTreeData) => {
     const newTree = merge([props.blocks.blocks], newTreeData);
     props.updateBlock(newTree[0]);
@@ -108,7 +117,7 @@ const ToolBar = (props) => {
                onChange={treeData => handleSetTreeData( treeData )}
                getNodeKey={getNodeKey}
                dndType="blocks"
-               theme={FileExplorerTheme}
+               theme={fileTheme}
                generateNodeProps={({ node, path }) => {
                    return {
                      className: `${node.type}`,
