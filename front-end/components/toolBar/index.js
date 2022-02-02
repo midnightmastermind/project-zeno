@@ -61,7 +61,6 @@
 
 import React from 'react';
 import SortableTree, { changeNodeAtPath }  from 'react-sortable-tree';
-import * as FileExplorerTheme from "react-sortable-tree-theme-file-explorer";
 import styles from './styles.module.scss'
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
