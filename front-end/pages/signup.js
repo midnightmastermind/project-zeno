@@ -1,106 +1,119 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import Layout from '../components/Layout';
+import { useState, useContext } from "react";
+import { useRouter } from "next/router";
+import cookies from "next-cookies";
 import actions from '../redux/actions/authActions';
-import initialize from '../utils/initialize';
+import Input from "../components/input";
+import Notice from "../components/notice";
+import { connect } from 'react-redux';
 
-class Signup extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name:'',
-      email:'',
-      password: '',
-      confirm_password:''
-    };
-  }
+const form = {
+  id: "signup",
+  inputs: [
+    {
+      id: "name",
+      type: "text",
+      label: "Name",
+      required: true,
+      value: "",
+    },
+    {
+      id: "email",
+      type: "email",
+      label: "E-Mail Address",
+      required: true,
+      value: "",
+    },
+    {
+      id: "password",
+      type: "password",
+      label: "Password",
+      required: true,
+      value: "",
+    },
+    {
+      id: "confirm_password",
+      type: "password",
+      label: "Confirm Password",
+      required: true,
+      value: "",
+    },
+  ],
+  submitButton: {
+    type: "submit",
+    label: "Sign up",
+  },
+};
 
-  static getInitialProps(ctx) {
-    initialize(ctx);
+const SignupPage = (props) => {
+  const RESET_NOTICE = { type: "", message: "" };
+  const [notice, setNotice] = useState(RESET_NOTICE);
+  const router = useRouter();
 
-    return {props: {}}
-  }
+  const values = {};
+  form.inputs.forEach((input) => (values[input.id] = input.value));
+  const [formData, setFormData] = useState(values);
 
-  handleSubmit(e) {
+  const handleInputChange = (id, value) => {
+    setFormData({ ...formData, [id]: value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(this.state);
-    this.props.signup(
-      { name: this.state.name, email: this.state.email, password: this.state.password, confirm_password: this.state.confirm_password },
-      'signup'
-    );
-  }
+    setNotice(RESET_NOTICE);
+    try {
+        props.signup(
+          { name: formData.name, email: formData.email, password: formData.password, confirm_password: formData.confirm_password },
+          'signup'
+        );
+    } catch (err) {
+      console.log(err);
+      setNotice({ type: "ERROR", message: "Something unexpected happened." });
+    }
+  };
 
-  render() {
-    return (
-      <div class="boxContainer fullWidth">
-        <h3 className="title is-3">Sign Up</h3>
-        <form
-          onSubmit={this.handleSubmit.bind(this)}
-          className="container"
-          style={{ width: '540px' }}
-        >
-          <div className="field">
-            <p className="control">
-              <input
-                className="input"
-                type="text"
-                placeholder="Name"
-                required
-                value={this.state.name}
-                onChange={e => this.setState({ name: e.target.value })}
+  return (
+    <>
+      <div className="boxContainer auth">
+        <h1 className="pageHeading">Signup</h1>
+        <form id={form.id} method="post" onSubmit={handleSubmit}>
+          {form.inputs.map((input, key) => {
+            return (
+              <Input
+              key={key}
+              formId={form.id}
+              id={input.id}
+              type={input.type}
+              label={input.label}
+              required={input.required}
+              value={formData[input.id]}
+              setValue={(value) => handleInputChange(input.id, value)}
               />
-            </p>
-          </div>
-          <div className="field">
-            <p className="control">
-              <input
-                className="input"
-                type="email"
-                placeholder="Email"
-                required
-                value={this.state.email}
-                onChange={e => this.setState({ email: e.target.value })}
-              />
-            </p>
-          </div>
-          <div className="field">
-            <p className="control">
-              <input
-                className="input"
-                type="password"
-                placeholder="Password"
-                required
-                value={this.state.password}
-                onChange={e => this.setState({ password: e.target.value })}
-              />
-            </p>
-          </div>
-          <div className="field">
-            <p className="control">
-              <input
-                className="input"
-                type="password"
-                placeholder="Password"
-                required
-                value={this.state.confirm_password}
-                onChange={e => this.setState({ confirm_password: e.target.value })}
-              />
-            </p>
-          </div>
-          <div className="field">
-            <p className="control has-text-centered">
-              <button type="submit" className="button is-success">
-                Register
-              </button>
-            </p>
-          </div>
+              );
+            })}
+          {notice.message && (
+            <Notice status={notice.type} mini>
+              {notice.message}
+            </Notice>
+          )}
+          <button type={form.submitButton.type}>{form.submitButton.label}</button>
         </form>
       </div>
-    );
+    </>
+  );
+};
+
+export const getServerSideProps = (context) => {
+  const { token } = cookies(context);
+  const res = context.res;
+  if (token) {
+    res.writeHead(302, { Location: `/account` });
+    res.end();
   }
-}
+  return { props: {} };
+};
+
 
 export default connect(
   state => state,
   actions
-)(Signup);
+)(SignupPage);

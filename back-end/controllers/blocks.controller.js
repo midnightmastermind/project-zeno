@@ -1,4 +1,4 @@
-const fs = require("fs");
+const fs = require('fs-extra')
 const path = require("path");
 
 const Block = require("../models/block.model");
@@ -14,8 +14,7 @@ const getBlocks = async (req, res, next) => {
       throw err;
     }
 
-    const blocks = await Block.find({ creator: userId }).populate("blocks");
-
+    const blocks = await Block.findOne({ creator: userId, type: "HomeBlock"}).deepPopulate('children children.children children.children');
     res.status(200).json({
       message: "Fetched blocks successfully.",
       blocks: blocks,
@@ -30,7 +29,7 @@ const getBlock = async (req, res, next) => {
   const blockId = req.params.blockId;
 
   try {
-    const block = await Block.findById(blockId).populate('blocks');
+    const block = await Block.findById(blockId).deepPopulate('children children.children children.children');
     if (!block) {
       const err = new Error("Could not find block by id.");
       err.statusCode = 404;
@@ -58,25 +57,33 @@ const getBlock = async (req, res, next) => {
 const postBlock = async (req, res, next) => {
   const userId = req.userId;
   const req_block = req.body.block;
+
   const block = new Block({
     ...req_block,
     creator: userId || null,
   });
 
-  if(req_block.pageBlock) {
+  if(req_block.type == "PageBlock") {
     const headerBlock = new Block({
       tag: 'h1',
-      blocks: [],
+      children: [],
       html: 'Untitled',
+      type: 'TitleBlock',
       imageUrl: "",
-      creator: null
+      creator: userId || null,
     });
     const savedHeaderBlock = await headerBlock.save();
-    block.blocks.push(savedHeaderBlock);
+    block.children.push(savedHeaderBlock);
   }
+
   try {
     const savedBlock = await block.save();
 
+    if(savedBlock.type == "PageBlock") {
+      const homeBlock = await Block.findOne({ creator: userId, type: 'HomeBlock' });
+      homeBlock.children.push(savedBlock);
+      const savedHomeBlock = await homeBlock.save();
+    }
     res.status(201).json({
       message: "Created block successfully.",
       blockId: savedBlock._id.toString(),
@@ -91,13 +98,16 @@ const postBlock = async (req, res, next) => {
 const putBlock = async (req, res, next) => {
   const userId = req.userId;
   const blockId = req.params.blockId;
-  let blocks = req.body.blocks;
-
+  let updatedBlock = req.body;
+  let newBlocks = [];
+  let changedTitle = null;
 
   try {
-    if (blocks) {
-      let newBlocks = [];
-      blocks.map(block => {
+    if (updatedBlock.children) {
+      updatedBlock.children.map(block => {
+        if(block.type == "TitleBlock") {
+          changedTitle = block.html;
+        }
         if(block._id) {
           let updateBlock = Block.findByIdAndUpdate(block._id, block, {useFindAndModify: false, upsert: true}, function (err, doc){
           });
@@ -110,31 +120,23 @@ const putBlock = async (req, res, next) => {
           newBlocks.push(savedBlock);
         }
       });
-      blocks = newBlocks;
-    }
-    const block = await Block.findById(blockId).populate("blocks");
-
-    if (!block) {
-      const err = new Error("Could not find block by id.");
-      err.statusCode = 404;
-      throw err;
     }
 
-    // Public blocks have no creator, they can be updated by anybody
-    // For private blocks, creator and logged-in user have to be the same
-    const creatorId = block.creator ? block.creator.toString() : null;
-    if ((creatorId && creatorId === userId) || !creatorId) {
-      block.blocks = blocks;
-      const savedBlock = await block.save();
-      res.status(200).json({
-        message: "Updated block successfully.",
-        block: savedBlock,
-      });
-    } else {
-      const err = new Error("User is not authenticated.");
-      err.statusCode = 401;
-      throw err;
+    if (changedTitle) {
+      updatedBlock.html = changedTitle
     }
+    const savedBlock = await Block.findByIdAndUpdate(blockId, updatedBlock, {useFindAndModify: false, upsert: true}, function (err, doc){
+    });;
+
+    if (newBlocks.length != 0) {
+      savedBlock.children = newBlocks;
+      savedBlock.save();
+    }
+
+    res.status(200).json({
+      message: "Updated block successfully.",
+      block: savedBlock,
+    });
   } catch (err) {
     next(err);
   }
@@ -165,7 +167,7 @@ const deleteBlock = async (req, res, next) => {
       fs.access(dir, (err) => {
         // If there is no error, the folder does exist
         if (!err && dir !== "images/") {
-          fs.rmdirSync(dir, { recursive: true });
+          fs.removeSync(dir);
         }
       });
 

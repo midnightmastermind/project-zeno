@@ -14,7 +14,7 @@ export const getServerSideProps = async (context) => {
   const res = context.res;
   const req = context.req;
 
-  const block = { _id: objectId(), tag: "p", html: "", imageUrl: "", blocks: [], pageBlock: true};
+  const block = { _id: objectId(), tag: "p", html: "Untitled", imageUrl: "", children: [], type: 'PageBlock'};
 
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API}/blocks`, {

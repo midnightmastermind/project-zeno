@@ -2,7 +2,7 @@
 
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-
+const deepPopulate = require('mongoose-deep-populate')(mongoose);
 const BlockSchema = new Schema(
   {
     tag: {
@@ -21,19 +21,17 @@ const BlockSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    pageBlock: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    blocks: [{
+    type: { type: String, enum: ['HomeBlock','PageBlock','TitleBlock','TextBlock']},
+    children: [{
       type: Schema.Types.ObjectId,
       ref: "Block",
     }],
+    expanded: { type: Boolean, default: false},
   },
   { timestamps: true}
 );
 
+BlockSchema.plugin(deepPopulate, {}); //<- {} empty options
 const Block = mongoose.model('Block', BlockSchema);
 
 module.exports = Block;

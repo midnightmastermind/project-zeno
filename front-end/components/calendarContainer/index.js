@@ -9,6 +9,7 @@ import {connect} from 'react-redux';
 
 const CalendarElement = styled.div`
 	max-width: 100%;
+	height: 100%;
 `;
 
 class CalendarContainer extends Component {

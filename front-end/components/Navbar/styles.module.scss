@@ -5,12 +5,10 @@
   max-width: $max-width;
   padding: .5rem 1rem;
   margin: 1rem 0px 0px 0px;
-  background: #000;
   border: 1px solid #787a80;
-  box-shadow: 0 20px 30px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 11px rgba(0,0,0,0.5);
   transition: filter 2s;
-  opacity: .6;
-  z-index: 1000;
+  background: rgba(0,0,0,0.6);
   position: relative;
   display: flex;
   flex-direction: row;

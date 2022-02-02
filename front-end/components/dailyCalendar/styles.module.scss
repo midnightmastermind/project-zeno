@@ -1,12 +1,15 @@
 
 .today {
     width: 40%;
-    height: 500px;
     border-left: 1px solid #787a80;
     border-right: 1px solid #787a80;
     padding-bottom: 50px;
+    height: 100%;
 }
 
+.dailyCalendar {
+  height: 100%;
+}
 .dayTitle {
     align-self: center;
     padding: 5px;
@@ -33,11 +36,12 @@
 }
 .outerDays {
     width: 30%;
-    height: 500px;
     padding-bottom: 50px;
+    height: 100%;
 }
 .dayBody {
   display: flex;
+  height: 100%;
 }
 .general {
     height: 25%;
@@ -58,7 +62,6 @@
 }
 
 .hour {
-    opacity: .6;
     border-top: 1px solid #787a80;
 }
 /* .dailyCalendar .day .hour:nth-child(odd) .hour-number {
@@ -72,4 +75,10 @@
     border-right: 1px solid #787a80;
     min-width: 70px;
     font-size: 12px;
+}
+
+.rst__tree{
+    width: 100%;
+    padding: 3px 0px;
+    margin-left: -22px;
 }

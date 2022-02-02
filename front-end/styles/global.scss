@@ -85,9 +85,8 @@ h1.pageHeading {
   width: 50%;
   margin: 10px auto;
   padding: 25px;
-  background: #000;
   color: white;
-  opacity: .6;
+  background: rgba(0,0,0,0.6);
 }
 
 .fullWidth {
@@ -98,6 +97,9 @@ h1.pageHeading {
   overflow-y: hidden;
 }
 
+.auth {
+  max-width: 400px;
+}
 .scrollable {
   overflow-y: scroll;
 }
@@ -119,9 +121,9 @@ form {
     height: 2.6rem;
     margin: 2rem 1rem 3rem 0;
     padding: 0 1rem;
+    border: 1px solid #787a80;
     background: $secondary;
     color: $primary;
-    border: none;
     border-radius: 0.5rem;
     color: $primary;
     font-family: $accent;
@@ -233,7 +235,6 @@ form {
 .rst__placeholder {
     width: 100%;
     max-width: 100% !important;
-    margin-left: 22px;
     margin-top: -3px;
     max-width: 410px !important;
 }
@@ -486,4 +487,43 @@ form {
 .loginPage {
   max-width: 500px;
 
+}
+
+input:-webkit-autofill-strong-password {
+    -webkit-text-security: none !important;
+    -webkit-user-select: none !important;
+    cursor: default !important;
+    font-family: monospace;
+}
+
+input:-webkit-autofill, input:-webkit-autofill-strong-password {
+    background-color: #000 !important;
+    background-image: none !important;
+    color: #000000 !important;
+}
+
+input:-internal-autofill-selected {
+  background: #000 !important;
+  color: #000 !important;
+}
+
+.rst__virtualScrollOverride {
+  overflow-x: hidden !important;
+}
+
+:focus-visible {
+  outline: none !important;
+}
+
+.rstcustom__rowContents {
+  cursor: pointer;
+}
+
+.day .rst__tree{
+    width: 100%;
+    padding: 3px 0px;
+}
+
+.day .rst__tree > div{
+    height: 100%;
 }

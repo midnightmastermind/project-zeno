@@ -12,13 +12,13 @@ import { fetchEvents, updateEvent } from "../../redux/actions/eventActions";
 import { connect } from 'react-redux';
 
 const Layout = (props) => {
-  const blocks = props.blocks.blocks || [];
+  const blocks = props.blocks || [];
   const router = useRouter();
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
 
 
-  const isLoginPage = router.pathname === "/login";
+  const isLoginPage = router.pathname === "/login" || router.pathname === "/account";
 
 
   const toggleContextMenu = () => {
@@ -43,20 +43,16 @@ const Layout = (props) => {
     handleNavigation: handleNavigation
   }
 
-  const toolProps = {
-    blocks: blocks
-  }
-  
   return (
     <div id="layoutRoot">
       <Head>
-        <title>Project Zeno</title>
+        <title>Stoa Page</title>
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       </Head>
       <Navbar {...navProps} />
       <div className={styles.contentContainer}>
-        {!isLoginPage && props.auth.token && (<ToolBar {...toolProps}/>) }
+        {!isLoginPage && props.auth.token && (<ToolBar />) }
         <main className={styles.content}>{props.children}</main>
       </div>
       <Footer />

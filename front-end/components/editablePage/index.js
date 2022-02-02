@@ -3,9 +3,12 @@ import { useRouter } from "next/router";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import styles from "./styles.module.scss";
 import EditableBlock from "../editableBlock";
+import TrashIcon from "../../images/trash.svg";
 import Notice from "../notice";
 import { usePrevious } from "../../hooks";
 import { objectId, setCaretToEnd } from "../../utils";
+import { connect } from 'react-redux';
+import actions from '../../redux/actions/blockActions';
 
 // A page is represented by an array containing several blocks
 // [
@@ -28,8 +31,8 @@ import { objectId, setCaretToEnd } from "../../utils";
 //   }
 // ]
 
-const EditablePage = ({ id, fetchedBlocks, err }) => {
-  if (err) {
+const EditablePage = ( props ) => {
+  if (props.err) {
     return (
       <Notice status="ERROR">
         <h3>Something went wrong 💔</h3>
@@ -38,7 +41,7 @@ const EditablePage = ({ id, fetchedBlocks, err }) => {
     );
   }
   const router = useRouter();
-  const [blocks, setBlocks] = useState(fetchedBlocks);
+  const [blocks, setBlocks] = useState(props.fetchedBlocks);
   const [currentBlockId, setCurrentBlockId] = useState(null);
 
   const prevBlocks = usePrevious(blocks);
@@ -46,15 +49,20 @@ const EditablePage = ({ id, fetchedBlocks, err }) => {
   // Update the database whenever blocks change
   useEffect(() => {
     const updatePageOnServer = async (blocks) => {
+
       try {
-        await fetch(`${process.env.NEXT_PUBLIC_API}/blocks/${id}`, {
-          method: "PUT",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            blocks: blocks,
-          }),
-        });
+        props.updateBlockById(
+          props.id,
+          blocks
+        );
+        // await fetch(`${process.env.NEXT_PUBLIC_API}/blocks/${id}`, {
+        //   method: "PUT",
+        //   credentials: "include",
+        //   headers: { "Content-Type": "application/json" },
+        //   body: JSON.stringify({
+        //     children: blocks
+        //   }),
+        // });
       } catch (err) {
         console.log(err);
       }
@@ -114,6 +122,9 @@ const EditablePage = ({ id, fetchedBlocks, err }) => {
   const updateBlockHandler = (currentBlock) => {
     const index = blocks.map((b) => b._id).indexOf(currentBlock.id);
     const oldBlock = blocks[index];
+    // if(index == 0) {
+    //   updateParent(oldBlock);
+    // }
     const updatedBlocks = [...blocks];
     updatedBlocks[index] = {
       ...updatedBlocks[index],
@@ -133,7 +144,7 @@ const EditablePage = ({ id, fetchedBlocks, err }) => {
     setCurrentBlockId(currentBlock.id);
     const index = blocks.map((b) => b._id).indexOf(currentBlock.id);
     const updatedBlocks = [...blocks];
-    const newBlock = { _id: objectId(), tag: "p", html: "", imageUrl: "" };
+    const newBlock = { _id: objectId(), tag: "p", html: "", imageUrl: "", type: 'TextBlock' };
     updatedBlocks.splice(index + 1, 0, newBlock);
     updatedBlocks[index] = {
       ...updatedBlocks[index],
@@ -175,7 +186,12 @@ const EditablePage = ({ id, fetchedBlocks, err }) => {
     setBlocks(updatedBlocks);
   };
 
+  const deleteCard = async (blockId) => {
+      await props.deleteBlock(blockId)
+      router.push("/notes");
+  };
   const isNewPublicPage = router.query.public === "true";
+
   return (
     <>
       {isNewPublicPage && (
@@ -184,10 +200,19 @@ const EditablePage = ({ id, fetchedBlocks, err }) => {
           <p>It will be automatically deleted after 24 hours.</p>
         </Notice>
       )}
+
       <DragDropContext onDragEnd={onDragEndHandler}>
-        <Droppable droppableId={id}>
+        <Droppable droppableId={props.id}>
           {(provided) => (
             <div className={styles.page} ref={provided.innerRef} {...provided.droppableProps}>
+            <span
+              role="button"
+              tabIndex="0"
+              className={styles.moreButton}
+              onClick={() => deleteCard(props.id)}
+            >
+              <img src={TrashIcon} alt="Trash Icon" />
+            </span>
               {blocks.map((block) => {
                 const position =
                   blocks.map((b) => b._id).indexOf(block._id) + 1;
@@ -199,7 +224,7 @@ const EditablePage = ({ id, fetchedBlocks, err }) => {
                     tag={block.tag}
                     html={block.html}
                     imageUrl={block.imageUrl}
-                    blockId={id}
+                    blockId={props.id}
                     addBlock={addBlockHandler}
                     deleteBlock={deleteBlockHandler}
                     updateBlock={updateBlockHandler}
@@ -215,4 +240,7 @@ const EditablePage = ({ id, fetchedBlocks, err }) => {
   );
 };
 
-export default EditablePage;
+export default connect(
+  state => state,
+  actions
+)(EditablePage);

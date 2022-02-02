@@ -137,7 +137,7 @@ class DailyCalendar extends Component {
 
               sortableElement =
                   hours[i].map((el, i) =>
-                   <div className={styles.hour} key={el} style={{height: '68px', display: 'flex', width: '100%'}}>
+                   <div className={styles.hour} key={el} style={{height: '100%', display: 'flex', width: '100%'}}>
                       {el !== "general" && <div className={styles.hourNumber}>{format(el, "ha").toLowerCase()}</div>}
                       <SortableTree
                         key={el+i}
@@ -250,7 +250,7 @@ class DailyCalendar extends Component {
                     {
                         days.map((parent_el, i) => {
                            let tree = this.state.events[format(parent_el, dayFormat)];
-                            return (<Day key={`${parent_el}${i}`} className={`${i%2 ? styles.today : styles.outerDays } ${styles.day}`}>
+                            return (<Day key={`${parent_el}${i}`} className={`${i%2 ? styles.today : styles.outerDays } ${styles.day} day`}>
                                 <div className={styles.dayHeader}>
                                     <span className={styles.dayTitle}>{format(parent_el, dayFormat)}</span><div className="view-change">
                                         <Button onClick={() => this.setView(i, "basic")} className="icon view-toggle">crop_landscape</Button>

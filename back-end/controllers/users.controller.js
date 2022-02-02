@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/user.model");
-
+const Block = require("../models/block.model");
 const signup = async (req, res, next) => {
 
   try {
@@ -40,6 +40,7 @@ const signup = async (req, res, next) => {
       password: hashedPassword,
       name: name
     });
+
     const savedUser = await user.save();
 
     // Automatically log in user after registration
@@ -47,6 +48,15 @@ const signup = async (req, res, next) => {
       { userId: savedUser._id.toString() },
       process.env.JWT_KEY
     );
+    const homeBlock = new Block({
+      tag: 'p',
+      children: [],
+      html: 'home',
+      imageUrl: "",
+      type: 'HomeBlock',
+      creator: savedUser._id.toString()
+    });
+    const savedHomeBlock = await homeBlock.save();
 
     // Set cookie in the browser to store authentication state
     const maxAge = 1000 * 60 * 60 * 24 * 3; // 3 days

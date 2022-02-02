@@ -3,17 +3,19 @@
 .menuWrapper {
   position: absolute;
   width: 6.875rem;
-  height: 9rem;
   z-index: 11;
   display: flex;
   flex-direction: column;
+  background: #144656;
+  border: 1px solid #787a80;
+  border-radius: 5px;
+  box-shadow: 0 20px 30px rgba(0,0,0,0.5);
 }
 
 .menu {
-  background: #000;
-  opacity: .6;
+  //background: #000;
   box-shadow: $box-shadow;
-  border-radius: 0.5rem;
+  border-radius: .5rem;
 }
 
 .item {
@@ -48,5 +50,4 @@
 
 .selectedTag {
   background: $tertiary;
-  border-radius: .5rem;
 }

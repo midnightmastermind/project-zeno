@@ -10,7 +10,7 @@ const Navbar = (props) => {
         <div className={styles.logo}>
           <Link href="/">
             <a>
-              project<span style={{ fontSize: "1.25rem" }}>.zeno</span>
+              stoa<span style={{ fontSize: "1.25rem" }}>.page</span>
             </a>
           </Link>
           <div className={styles.logoImage}></div>

@@ -25,14 +25,10 @@ export const fetchBlocks = dispatch => {
 };
 
 export const updateBlock = block => dispatch => {
-  let requestUrl;
-  if (block._id) {
-        requestUrl = '/blocks/' + block._id + '/update';
-  } else {
-       requestUrl = '/blocks/create';
-  }
+  let requestUrl = '/blocks/' + block._id;
+
   axios
-    .post(`${process.env.NEXT_PUBLIC_API}${requestUrl}`, block, {withCredentials: true})
+    .put(`${process.env.NEXT_PUBLIC_API}${requestUrl}`, block, {withCredentials: true})
     .then(res => {
       dispatch(fetchBlocks());
     })
@@ -45,6 +41,41 @@ export const updateBlock = block => dispatch => {
 
 };
 
+export const updateBlockById = (id, blocks) => dispatch => {
+  let requestUrl = '/blocks/' + id;
+  let requestProps = {children: blocks};
+  axios
+    .put(`${process.env.NEXT_PUBLIC_API}${requestUrl}`, requestProps, {withCredentials: true})
+    .then(res => {
+      dispatch(fetchBlocks());
+    })
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+
+};
+
+export const createBlock = block => dispatch => {
+  const requestUrl = '/blocks';
+
+  axios
+    .post(`${process.env.NEXT_PUBLIC_API}${requestUrl}`, {block: block}, {withCredentials: true})
+    .then(res => {
+      dispatch(fetchBlocks());
+    })
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+
+};
+
+
 export const deleteBlock = blockId => dispatch => {
   axios
     .delete(`${process.env.NEXT_PUBLIC_API}/blocks/${blockId}`, {withCredentials: true})
@@ -54,7 +85,7 @@ export const deleteBlock = blockId => dispatch => {
     .catch(err =>
       dispatch({
         type: GET_ERRORS,
-        payload: err.response.data
+        payload: err.response
       })
     );
 
@@ -75,6 +106,8 @@ export const requestBlocks = () => {
 
 export default {
   fetchBlocks,
+  createBlock,
+  updateBlockById,
   updateBlock,
   deleteBlock
 };

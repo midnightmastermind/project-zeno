@@ -137,6 +137,7 @@ class EditableBlock extends React.Component {
   }
 
   handleKeyDown(e) {
+    console.log(e.key);
     if (e.key === CMD_KEY) {
       // If the user starts to enter a command, we store a backup copy of
       // the html. We need this to restore a clean version of the content
